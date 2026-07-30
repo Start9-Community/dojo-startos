@@ -134,21 +134,15 @@ RUN cp /home/tor/.torrc /home/soroban/.torrc
 
 COPY ./samourai-dojo/docker/my-dojo/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx/*.conf /etc/nginx/sites-available/
-RUN mkdir /etc/nginx/sites-enabled && \
-    ln -sf /etc/nginx/sites-available/mainnet.conf /etc/nginx/sites-enabled/dojo.conf
+# frontend-entrypoint.sh enables the config for the selected network.
+RUN mkdir /etc/nginx/sites-enabled
 
 ### Daemon scripts
 
-COPY ./config.env /usr/local/bin/config.env
-COPY --chmod=755 ./db-entrypoint.sh /usr/local/bin/
-COPY --chmod=755 ./soroban-entrypoint.sh /usr/local/bin/
-COPY --chmod=755 ./backend-entrypoint.sh /usr/local/bin/
-COPY --chmod=755 ./check-synced.sh /usr/local/bin/
-COPY --chmod=755 ./check-api.sh /usr/local/bin/
-COPY --chmod=755 ./check-mysql.sh /usr/local/bin/
-COPY --chmod=755 ./check-pushtx.sh /usr/local/bin/
-COPY --chmod=755 ./check-soroban.sh /usr/local/bin/
-COPY --chmod=755 ./functions.sh /usr/local/bin/
+# The package's own entrypoint and health scripts are not baked in — they ship
+# in assets/ and are mounted at /assets by startos/main.ts, so editing one does
+# not mean rebuilding the Tor and Soroban stages above. Only this upstream
+# script, which comes from the submodule, is copied in.
 COPY --chmod=755 ./samourai-dojo/docker/my-dojo/soroban/restart.sh /usr/local/bin/soroban-restart.sh
 
 # Remove /tmp clean since it errors out nodejs 24

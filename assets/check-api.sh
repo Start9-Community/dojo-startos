@@ -1,18 +1,17 @@
 #!/bin/bash
 # vim: sw=2 ts=2 sts=2 et ai
 
-source /usr/local/bin/config.env
-source /usr/local/bin/functions.sh
+source /assets/config.env
+source /assets/functions.sh
 
-admin_key=$(jq -r '.dojo.adminKey' /root/store.json 2>/dev/null)
 access_token=$(cat /run/secrets/access_token 2>/dev/null)
 
 if [ -z "$access_token" ] || ! check_token "$access_token"; then
-  access_token=$(do_authenticate "$admin_key")
+  access_token=$(do_authenticate "$NODE_ADMIN_KEY")
 fi
 
 if [ -z "$access_token" ]; then
-  # Starting
+  echo "Waiting for the accounts API to accept the admin key..." >&2
   exit 60
 fi
 
@@ -20,5 +19,5 @@ if get_account_status "$access_token"; then
   exit 0
 fi
 
-echo "Waiting for API to be ready..." >&2
+echo "Waiting for the accounts API to answer..." >&2
 exit 61
