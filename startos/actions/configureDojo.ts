@@ -1,150 +1,156 @@
 import { storeJson } from '../fileModels/store.json'
-import { sdk } from '../sdk'
 import { i18n } from '../i18n'
+import { sdk } from '../sdk'
 
 const { InputSpec, Value, Variants } = sdk
 
-const sorobanVariants = Variants.of({
-  disabled: {
-    name: i18n('Disabled'),
-    spec: InputSpec.of({}),
-  },
-  enabled: {
-    name: i18n('Enabled'),
-    spec: InputSpec.of({
-      'pandotx-process': Value.toggle({
-        name: i18n('PandoTx Process'),
-        description: i18n(
-          'Process and relay transactions from other Soroban nodes',
-        ),
-        default: false,
-      }),
-    }),
-  },
-})
-
-export const inputSpec = InputSpec.of({
-  paymentCode: Value.text({
-    name: i18n('BIP47 Payment Code'),
-    required: false,
-    default: null,
-    placeholder: null,
-    inputmode: 'text',
-    patterns: [],
-    masked: false,
-  }),
-  adminKey: Value.text({
-    name: i18n('Admin Key'),
-    description: i18n('Key for accessing the admin/maintenance'),
-    required: true,
-    default: { charset: 'a-z,A-Z,0-9', len: 22 },
-    placeholder: null,
-    inputmode: 'text',
-    patterns: [],
-    masked: true,
-    generate: { charset: 'a-z,A-Z,0-9', len: 22 },
-  }),
-  apiKey: Value.text({
-    name: i18n('API Key'),
-    description: i18n('Key for accessing the services'),
-    required: true,
-    default: { charset: 'a-z,A-Z,0-9', len: 22 },
-    placeholder: null,
-    inputmode: 'text',
-    patterns: [],
-    masked: true,
-    generate: { charset: 'a-z,A-Z,0-9', len: 22 },
-  }),
-  jwtSecret: Value.text({
-    name: i18n('JWT Secret'),
-    description: i18n('Secret used by the server for signing'),
-    required: true,
-    default: { charset: 'a-z,A-Z,0-9', len: 22 },
-    placeholder: null,
-    inputmode: 'text',
-    patterns: [],
-    masked: true,
-    generate: { charset: 'a-z,A-Z,0-9', len: 22 },
-  }),
-  sorobanAnnounce: Value.union({
-    name: i18n('Soroban Network Announce'),
-    description: i18n('Configure Soroban network participation'),
-    warning: null,
-    variants: sorobanVariants,
-    default: 'disabled',
-  }),
-  pandotxPush: Value.toggle({
-    name: i18n('PandoTx Push'),
-    description: i18n(
-      'Push your transactions through random Soroban nodes for enhanced privacy',
-    ),
-    default: true,
-  }),
-  pandotxRetries: Value.number({
-    name: i18n('PandoTx Retries'),
-    description: i18n('Maximum retry attempts for failed transaction pushes'),
-    required: true,
-    default: 2,
-    min: 0,
-    max: 10,
-    integer: true,
-    units: null,
-    placeholder: null,
-  }),
-  pandotxFallbackMode: Value.select({
-    name: i18n('PandoTx Fallback Mode'),
-    description: i18n('Behavior when Soroban push fails'),
-    values: {
-      convenient: i18n('Convenient (fallback to local node)'),
-      secure: i18n('Secure (fail if Soroban unavailable)'),
-    },
-    default: 'convenient',
-  }),
-})
+const secret = { charset: 'a-z,A-Z,0-9', len: 22 }
 
 export const configureDojoAction = sdk.Action.withInput(
   'configure-dojo',
 
-  async ({ effects }) => ({
+  async () => ({
     name: i18n('Configure Dojo'),
     description: i18n(
-      'Customize your Dojo',
+      'Set the keys wallets authenticate with, and how Dojo broadcasts transactions',
     ),
-    warning: null,
+    warning: i18n(
+      'Changing a key invalidates the pairing code, and every paired wallet has to be paired again.',
+    ),
     allowedStatuses: 'any',
     group: i18n('Configuration'),
     visibility: 'enabled',
   }),
 
-  inputSpec,
+  InputSpec.of({
+    paymentCode: Value.text({
+      name: i18n('BIP47 Payment Code'),
+      description: i18n(
+        'A PayNym payment code that can sign in to the maintenance tool in place of the admin key',
+      ),
+      required: false,
+      default: null,
+      placeholder: null,
+      inputmode: 'text',
+      patterns: [],
+      masked: false,
+    }),
+    apiKey: Value.text({
+      name: i18n('API Key'),
+      description: i18n('The key wallets authenticate to Dojo with'),
+      required: true,
+      default: secret,
+      placeholder: null,
+      inputmode: 'text',
+      patterns: [],
+      masked: true,
+      generate: secret,
+    }),
+    adminKey: Value.text({
+      name: i18n('Admin Key'),
+      description: i18n('The key that signs in to the maintenance tool'),
+      required: true,
+      default: secret,
+      placeholder: null,
+      inputmode: 'text',
+      patterns: [],
+      masked: true,
+      generate: secret,
+    }),
+    jwtSecret: Value.text({
+      name: i18n('JWT Secret'),
+      description: i18n('The secret Dojo signs its session tokens with'),
+      required: true,
+      default: secret,
+      placeholder: null,
+      inputmode: 'text',
+      patterns: [],
+      masked: true,
+      generate: secret,
+    }),
+    soroban: Value.union({
+      name: i18n('Soroban Network'),
+      description: i18n(
+        'Announce this Dojo to the Soroban network so other nodes can relay through it',
+      ),
+      warning: null,
+      variants: Variants.of({
+        off: { name: i18n('Do not announce'), spec: InputSpec.of({}) },
+        on: {
+          name: i18n('Announce'),
+          spec: InputSpec.of({
+            pandotxProcess: Value.toggle({
+              name: i18n('Relay Transactions'),
+              description: i18n(
+                'Broadcast transactions that other Soroban nodes hand to this one',
+              ),
+              default: false,
+            }),
+          }),
+        },
+      }),
+      default: 'off',
+    }),
+    pandotxPush: Value.toggle({
+      name: i18n('Broadcast Through Soroban'),
+      description: i18n(
+        'Send your own transactions through a randomly chosen Soroban node, so they are not first seen at your node',
+      ),
+      default: true,
+    }),
+    pandotxFallbackMode: Value.select({
+      name: i18n('If Soroban Broadcast Fails'),
+      description: i18n(
+        'What to do when no Soroban node accepts a transaction',
+      ),
+      values: {
+        convenient: i18n('Broadcast from this node instead'),
+        secure: i18n('Do not broadcast'),
+      },
+      default: 'convenient',
+    }),
+    pandotxRetries: Value.number({
+      name: i18n('Soroban Broadcast Retries'),
+      description: i18n(
+        'How many other Soroban nodes to try before falling back',
+      ),
+      required: true,
+      default: 2,
+      min: 0,
+      max: 10,
+      integer: true,
+      units: null,
+      placeholder: null,
+    }),
+  }),
 
-  // pre-fill
   async ({ effects }) => {
-    const dojo = await storeJson.read((s) => s.dojo).const(effects)
-    if (!dojo) return {}
+    const store = await storeJson.read().const(effects)
+    if (!store) return {}
     return {
-      ...dojo,
-      sorobanAnnounce:
-        dojo.sorobanAnnounce.enabled === 'enabled'
-          ? { selection: 'enabled', value: { 'pandotx-process': dojo.sorobanAnnounce.pandotxProcess } }
-          : { selection: 'disabled', value: {} },
+      paymentCode: store.paymentCode,
+      apiKey: store.apiKey,
+      adminKey: store.adminKey,
+      jwtSecret: store.jwtSecret,
+      soroban: store.sorobanAnnounce
+        ? {
+            selection: 'on' as const,
+            value: { pandotxProcess: store.pandotxProcess },
+          }
+        : { selection: 'off' as const, value: {} },
+      pandotxPush: store.pandotxPush,
+      pandotxFallbackMode: store.pandotxFallbackMode,
+      pandotxRetries: store.pandotxRetries,
     }
   },
 
-  // execution
   async ({ effects, input }) => {
-    const announce = input.sorobanAnnounce
-    return storeJson.merge(effects, {
-      dojo: {
-        ...input,
-        sorobanAnnounce: {
-          enabled: announce.selection,
-          pandotxProcess:
-            announce.selection === 'enabled'
-              ? announce.value['pandotx-process']
-              : false,
-        },
-      },
+    const { soroban, ...rest } = input
+    await storeJson.merge(effects, {
+      ...rest,
+      sorobanAnnounce: soroban.selection === 'on',
+      pandotxProcess:
+        soroban.selection === 'on' ? soroban.value.pandotxProcess : false,
     })
   },
 )

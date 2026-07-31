@@ -1,17 +1,16 @@
 import { FileHelper, z } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
 
+/**
+ * Written by the backend daemon's entrypoint, read by the View Pairing Code
+ * action. The pairing payload is assembled in the container because it embeds
+ * Dojo's own version tag, which only the image knows.
+ */
 const shape = z.object({
   pairingCode: z.string().catch(''),
-  adminKey: z.string().catch(''),
 })
 
-export type BackendJson = z.infer<typeof shape>
-
 export const backendJson = FileHelper.json(
-  {
-    base: sdk.volumes.main,
-    subpath: 'backend.json',
-  },
+  { base: sdk.volumes.main, subpath: 'backend.json' },
   shape,
 )

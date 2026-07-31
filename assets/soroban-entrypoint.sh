@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ea
 
-source /usr/local/bin/config.env
+source /assets/config.env
 
 # Start Soroban if enabled
 echo "[i] Checking Soroban configuration..."

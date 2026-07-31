@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ea
 
-source /usr/local/bin/config.env
+source /assets/config.env
 
 # DATABASE SETUP
 if [ -d "/run/mysqld" ]; then
@@ -22,7 +22,6 @@ if [ ! -d  /var/lib/mysql/mysql ]; then
 
 	mkdir -p /var/lib/mysql
 	chown -R mysql:mysql /var/lib/mysql
-	touch /var/lib/mysql/.dojo_db_initialized
 
 	mysql_install_db --user=mysql --ldata=/var/lib/mysql > /dev/null
 
@@ -34,7 +33,7 @@ if [ ! -d  /var/lib/mysql/mysql ]; then
 
 	tfile=$(mktemp)
 	if [ ! -f "$tfile" ]; then
-		return 1
+		exit 1
 	fi
 
 	cat << EOF > "$tfile"
