@@ -5,7 +5,7 @@ const dict = {
   'Starting Dojo!': 0,
   'Tor Address': 1,
   'Wallets can pair over Tor': 2,
-  'Add a Tor address to the Web UI interface — Dojo pairs wallets over its onion address and cannot serve one without it': 3,
+  'Add a Tor address to a Dojo interface — wallets pair over the onion address, and Dojo cannot issue a pairing code without one': 3,
   Database: 4,
   'The database is accepting connections': 5,
   'The database is starting...': 6,
@@ -15,9 +15,9 @@ const dict = {
   'Dojo API': 10,
   'The Dojo API is accepting connections': 11,
   'The Dojo API is starting...': 12,
-  'Web UI': 13,
-  'The web interface is ready': 14,
-  'The web interface is not ready': 15,
+  'Web Server': 13,
+  'The web server is ready': 14,
+  'The web server is not ready': 15,
   'Transaction Broadcast': 16,
   'Dojo can broadcast transactions': 17,
   'The broadcast endpoint is starting...': 18,
@@ -26,7 +26,10 @@ const dict = {
   'Dojo is syncing...': 21,
 
   // interfaces.ts
-  'The Dojo Maintenance Tool, and the endpoint wallets pair to': 22,
+  'Maintenance Tool': 22,
+  "Dojo's admin interface, for managing your Dojo": 71,
+  'Wallet API': 72,
+  'The endpoint wallets pair to and query': 73,
 
   // dependencies.ts
   'Dojo needs pruning disabled and txindex and ZeroMQ enabled in Bitcoin': 23,

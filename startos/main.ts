@@ -171,7 +171,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
             : {
                 result: 'failure',
                 message: i18n(
-                  'Add a Tor address to the Web UI interface — Dojo pairs wallets over its onion address and cannot serve one without it',
+                  'Add a Tor address to a Dojo interface — wallets pair over the onion address, and Dojo cannot issue a pairing code without one',
                 ),
               },
       },
@@ -249,12 +249,12 @@ export const main = sdk.setupMain(async ({ effects }) => {
       subcontainer: sub,
       exec: { command: ['bash', `${assetsDir}/frontend-entrypoint.sh`], env },
       ready: {
-        display: i18n('Web UI'),
+        display: i18n('Web Server'),
         gracePeriod: 120_000,
         fn: () =>
           sdk.healthCheck.checkPortListening(effects, uiPort, {
-            successMessage: i18n('The web interface is ready'),
-            errorMessage: i18n('The web interface is not ready'),
+            successMessage: i18n('The web server is ready'),
+            errorMessage: i18n('The web server is not ready'),
           }),
       },
       requires: ['backend'],

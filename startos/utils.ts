@@ -33,6 +33,7 @@ export const uiPort = 9000
  * address, and renaming it would orphan that address and break paired wallets. */
 export const uiHostId = 'main'
 export const uiInterfaceId = 'ui'
+export const apiInterfaceId = 'api'
 
 export const dataDir = '/data'
 export const dbDir = '/var/lib/mysql'

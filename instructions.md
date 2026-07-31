@@ -11,15 +11,15 @@ A private backend your wallet talks to instead of a public server. Dojo keeps it
 HD and BIP47 accounts, answers balance and history queries from that index, and broadcasts your
 transactions through your own Bitcoin node.
 
-It exposes one interface, the **Web UI**: the Dojo Maintenance Tool in a browser, and the endpoint
-your wallet pairs to. Your API key, admin key and JWT secret are generated for you on install — you
+It exposes two interfaces on the same address: the **Maintenance Tool**, which you open in a
+browser to manage your Dojo, and the **Wallet API**, which is what your wallet pairs to and queries. Your API key, admin key and JWT secret are generated for you on install — you
 never have to invent them, and they do not change when Dojo restarts.
 
 ## Getting set up
 
-1. **Install Tor** if it is not already installed, and give Dojo a Tor address: open the **Web UI**
-   interface and add one. Wallets pair to Dojo over its onion address, so Dojo will not start
-   without one.
+1. **Install Tor** if it is not already installed, and give Dojo a Tor address: open either of
+   Dojo's interfaces and add one — they share it. Wallets pair to Dojo over its onion address, so
+   Dojo will not start without one.
 2. **Install Bitcoin** (or Bitcoin (testnet4), if you chose testnet). Dojo will ask you to confirm a
    change to Bitcoin's settings — it needs pruning turned off and txindex and ZeroMQ turned on. Accept
    it; the values are filled in for you. Dojo does not work with Bitcoin Knots; if that is what you
@@ -44,8 +44,8 @@ key.
 
 ### The Dojo Maintenance Tool
 
-Open the **Web UI** interface in a Tor-capable browser. Sign in with the admin key from **View
-Pairing Code**. From there you can see the status of your Dojo, your node, your indexer and the
+Open the **Maintenance Tool** interface in a Tor-capable browser. Sign in with the admin key from
+**View Pairing Code**. From there you can see the status of your Dojo, your node, your indexer and the
 database; broadcast a raw transaction; and run a custom scan of a wallet.
 
 If you would rather sign in with a PayNym than a key, set a BIP47 payment code in **Configure
