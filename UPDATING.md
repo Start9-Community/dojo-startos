@@ -27,8 +27,7 @@ submodule, and Tor and Soroban as pinned source builds inside the `Dockerfile`.
 
 ## Applying the bump
 
-- **Dojo**: check the submodule out at the new tag, then set `version` in
-  `startos/versions/current.ts` to `<new version>:0`.
+- **Dojo**: check the submodule out at the new tag.
 
   ```sh
   git -C samourai-dojo fetch --tags
@@ -43,6 +42,3 @@ submodule, and Tor and Soroban as pinned source builds inside the `Dockerfile`.
 - **Soroban**: set `SOROBAN_VERSION` in the `Dockerfile` (no leading `v`; the download URL adds it).
 
 - **Tor**: set `TOR_VERSION` in the `Dockerfile` to the full tag (e.g. `tor-0.4.9.6`).
-
-A Soroban or Tor bump alone is a wrapper change: leave the upstream version and increment the
-downstream revision in `startos/versions/current.ts`.
