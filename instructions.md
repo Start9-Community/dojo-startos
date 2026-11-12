@@ -43,6 +43,10 @@ Run **View Pairing Code** once Dojo is running. It shows a QR code your wallet s
 Samourai Wallet, Sparrow and other Dojo-aware wallets all accept it — and, below it, your admin
 key.
 
+The Maintenance Tool has a Pairing screen of its own, but its code points at whatever address you
+opened the tool on. Opened on your LAN, that code only works while your phone is on the same
+network, so pair from **View Pairing Code** instead.
+
 ### The Dojo Maintenance Tool
 
 Open the **Maintenance Tool** interface in a Tor-capable browser. Sign in with the admin key from

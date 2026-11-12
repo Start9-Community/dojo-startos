@@ -84,16 +84,14 @@ export const main = sdk.setupMain(async ({ effects }) => {
   // a copy in store.json, so adding or removing the address restarts main and
   // takes effect immediately instead of waiting for the next container init.
   const onion = await sdk.host
-    .getOwn(
-      effects,
-      uiHostId,
-      (host) =>
-        Object.values(host?.bindings ?? {})
-          .flatMap((binding) => Object.values(binding.interfaces))
-          .find((iface) => iface.id === uiInterfaceId)
-          ?.addressInfo.public.filter({ pluginId: 'tor' })
-          .format('hostname-info')[0]?.hostname,
-    )
+    .getOwn(effects, uiHostId, (host) => {
+      const tor = Object.values(host?.bindings ?? {})
+        .flatMap((binding) => Object.values(binding.interfaces))
+        .find((iface) => iface.id === uiInterfaceId)
+        ?.addressInfo.public.filter({ pluginId: 'tor' })
+      const h = tor?.format('hostname-info')[0]
+      return h && { hostname: h.hostname, origin: new URL(tor.toUrl(h)).origin }
+    })
     .const()
 
   const sub = sdk.SubContainer.of(
@@ -132,7 +130,8 @@ export const main = sdk.setupMain(async ({ effects }) => {
   // would overwrite anything set here under the upstream names.
   const env = {
     S9_DATA_DIR: dataDir,
-    S9_TOR_ADDRESS: onion ?? '',
+    S9_TOR_ADDRESS: onion?.hostname ?? '',
+    S9_TOR_ORIGIN: onion?.origin ?? '',
     S9_TOR_SOCKS_HOST: socks.host,
     S9_TOR_SOCKS_PORT: socks.port,
     S9_BITCOIN_NETWORK: node.network,

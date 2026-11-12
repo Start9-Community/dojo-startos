@@ -1,13 +1,16 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '1.29.2:6',
+  version: '1.29.2:7',
   releaseNotes: {
-    en_US: 'Updates Node.js to 24.22.1 with security fixes.',
-    es_ES: 'Actualiza Node.js a 24.22.1 con correcciones de seguridad.',
-    de_DE: 'Aktualisiert Node.js auf 24.22.1 mit Sicherheitskorrekturen.',
-    pl_PL: 'Aktualizuje Node.js do wersji 24.22.1 z poprawkami bezpieczeństwa.',
-    fr_FR: 'Met à jour Node.js vers 24.22.1 avec des correctifs de sécurité.',
+    en_US: 'The pairing code from View Pairing Code connects wallets over Tor.',
+    es_ES:
+      'El código de emparejamiento de View Pairing Code conecta las billeteras a través de Tor.',
+    de_DE:
+      'Der Kopplungscode aus View Pairing Code verbindet Wallets über Tor.',
+    pl_PL: 'Kod parowania z View Pairing Code łączy portfele przez Tor.',
+    fr_FR:
+      "Le code d'appairage de View Pairing Code connecte les portefeuilles via Tor.",
   },
   migrations: {
     up: async () => {},

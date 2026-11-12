@@ -166,6 +166,7 @@ Shows the code a wallet scans, plus the admin key.
 - **What it changes:** nothing. It is a read.
 - **Repeat safety:** read-only, and stable: the same code until a secret changes.
 - **It returns nothing useful without a Tor address**, since the code is built around the onion.
+- **Its API URL is the Tor address exactly as StartOS publishes it**, with the scheme and port that StartOS gives it. The maintenance tool's own Pairing screen builds the URL from the browser's address instead, so it only gives a Tor-usable code when the tool is opened over the onion.
 
 ## Tasks
 
