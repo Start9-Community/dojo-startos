@@ -23,14 +23,14 @@ fi
 mkdir -p /var/lib/tor/hsv3explorer
 echo -n "$EXPLORER_ENDPOINT" > /var/lib/tor/hsv3explorer/hostname
 
-echo "[i] Pairing URL: http://$TOR_ADDRESS$API_BASE_URI"
+echo "[i] Pairing URL: $TOR_ORIGIN$API_BASE_URI"
 
 # The same payload the maintenance tool assembles on its Pairing screen: Dojo's
 # /support/pairing response, plus the API url a browser would have filled in
 # from its own location. Read back by the View Pairing Code action.
 cat > "$S9_DATA_DIR/backend.json" << EOF
 {
-  "pairingCode": "{\"pairing\":{\"type\":\"dojo.api\",\"version\":\"$DOJO_VERSION_TAG\",\"apikey\":\"$NODE_API_KEY\",\"url\":\"http://$TOR_ADDRESS$API_BASE_URI\"},\"explorer\":{\"type\":\"explorer.$EXPLORER_TYPE\",\"url\":\"http://$EXPLORER_ENDPOINT\"}}"
+  "pairingCode": "{\"pairing\":{\"type\":\"dojo.api\",\"version\":\"$DOJO_VERSION_TAG\",\"apikey\":\"$NODE_API_KEY\",\"url\":\"$TOR_ORIGIN$API_BASE_URI\"},\"explorer\":{\"type\":\"explorer.$EXPLORER_TYPE\",\"url\":\"http://$EXPLORER_ENDPOINT\"}}"
 }
 EOF
 
